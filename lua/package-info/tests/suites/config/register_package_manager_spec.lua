@@ -51,4 +51,30 @@ describe("Config register_package_manager", function()
 
         assert.are.equals(constants.PACKAGE_MANAGERS.pnpm, config.options.package_manager)
     end)
+
+    it("should detect bun package manager bun.lock", function()
+        local package_json = file.create_package_json({ go = true })
+        local lock_file_path = vim.fn.fnamemodify(package_json.path, ":h") .. "/bun.lock"
+        local created_file = file.create({ name = lock_file_path })
+
+        config.__register_package_manager()
+
+        file.delete(created_file.path)
+        file.delete(package_json.path)
+
+        assert.are.equals(constants.PACKAGE_MANAGERS.bun, config.options.package_manager)
+    end)
+
+    it("should detect bun package manager bun.lockb", function()
+        local package_json = file.create_package_json({ go = true })
+        local lock_file_path = vim.fn.fnamemodify(package_json.path, ":h") .. "/bun.lockb"
+        local created_file = file.create({ name = lock_file_path })
+
+        config.__register_package_manager()
+
+        file.delete(created_file.path)
+        file.delete(package_json.path)
+
+        assert.are.equals(constants.PACKAGE_MANAGERS.bun, config.options.package_manager)
+    end)
 end)
